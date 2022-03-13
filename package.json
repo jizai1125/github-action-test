@@ -1,5 +1,5 @@
 {
-  "name": "action_npm_test",
+  "name": "github-action-test",
   "version": "1.0.6",
   "description": "hahaha",
   "main": "src/index.js",
