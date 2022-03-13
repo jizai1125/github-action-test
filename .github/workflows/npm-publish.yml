@@ -5,6 +5,8 @@ name: npm publish
 # 推送 tags 时触发
 on:
   push:
+    branches:
+      - master
     tags:
       - v*
 
