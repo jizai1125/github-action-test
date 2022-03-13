@@ -13,8 +13,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "**.js"
+    tags:
+      - "v*"
 
 jobs:
   publish-npm:
