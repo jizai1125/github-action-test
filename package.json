@@ -1,6 +1,6 @@
 {
   "name": "action_npm_test",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "hahaha",
   "main": "src/index.js",
   "files": [
