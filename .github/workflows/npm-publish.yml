@@ -12,7 +12,7 @@ name: npm publish
 on:
   push:
     branches:
-      - "master/**"
+      - master
     paths:
       - "**.js"
 
