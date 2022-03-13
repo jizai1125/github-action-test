@@ -2,13 +2,11 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
 
 name: npm publish
-
+# master 分支推送 tags 时触发
 on:
   push:
-    branches: [master]
-  # pull_request:
-  #   branches: [master]
-  push:
+    branches:
+      - master
     tags:
       - v*
 
