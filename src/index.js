@@ -1,5 +1,8 @@
-import axios from "axios";
+const axios = require("axios");
+
 axios
   .get("/test/")
   .then((res) => {})
-  .catch((err) => {});
+  .catch((err) => {
+    console.log("axios error", 111111111111111111);
+  });

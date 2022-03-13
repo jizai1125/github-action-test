@@ -4,11 +4,10 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: [master]
 
 jobs:
-
   publish-npm:
     runs-on: ubuntu-latest
     steps:
@@ -21,4 +20,4 @@ jobs:
       - run: yarn build
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
