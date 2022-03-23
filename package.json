@@ -1,5 +1,5 @@
 {
-  "name": "github-action-test",
+  "name": "github-test-action",
   "version": "0.0.1",
   "description": "hahaha",
   "main": "src/index.js",
