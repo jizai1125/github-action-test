@@ -1,8 +1,10 @@
 /**
  * 版本发布
  * 命令行指定版本号 yarn release 1.2.3
- * 命令行选项
+ * 命令行可选项
  * --preid 指定先行版本号
+ * --tag 指定 npm tag
+ * --dry 空跑，只执行修改版本号
  */
 const args = require("minimist")(process.argv.slice(2));
 const semver = require("semver");
@@ -12,6 +14,17 @@ const execa = require("execa");
 const path = require("path");
 const fs = require("fs");
 const currentVersion = require("../package.json").version;
+const pkgPath = path.resolve(__dirname, "../package.json");
+
+const isDryRun = args.dry;
+const inc = (type) => semver.inc(currentVersion, type, preId);
+const step = (msg) => console.log(chalk.cyan(msg));
+const run = (bin, args, opts = {}) => {
+  return execa(bin, args, { stdio: "inherit", ...opts });
+};
+const dryRun = (bin, args, opts = {}) =>
+  console.log(chalk.blue(`[dryrun] ${bin} ${args.join(" ")}`), opts);
+const runIfNotDry = isDryRun ? dryRun : run;
 // 获取先行版本号 id
 const preId =
   args.preid ||
@@ -23,17 +36,9 @@ const versionIncTypes = [
   "major",
   ...(preId ? ["prepatch", "preminor", "premajor", "prerelease"] : []),
 ];
-const isDryRun = args.dry;
-const inc = (type) => semver.inc(currentVersion, type, preId);
-const step = (msg) => console.log(chalk.cyan(msg));
-const run = (bin, args, opts = {}) => {
-  return execa(bin, args, { stdio: "inherit", ...opts });
-};
-const dryRun = (bin, args, opts = {}) =>
-  console.log(chalk.blue(`[dryrun] ${bin} ${args.join(" ")}`), opts);
-const runIfNotDry = isDryRun ? dryRun : run;
 
 async function main() {
+  // 1. 确定版本号
   step("\n确定版本号");
   let targetVersion = args._[0];
   if (!targetVersion) {
@@ -73,11 +78,14 @@ async function main() {
   if (!yes) {
     return;
   }
+  // 2. 更新 package.json 文件版本号
   step("\n更新 package.json 文件版本号");
   updatePkgVersion(targetVersion);
+  // 3. 运行打包命令
   step("\n运行打包命令");
   run("yarn", ["build"]);
-  // step('\n生成changelog')
+  // 4. TODO step('\n生成changelog')
+  // 5. 提交代码
   step("\n提交代码");
   const { stdout } = await run("git", ["diff"], { stdio: "pipe" });
   if (stdout) {
@@ -89,16 +97,54 @@ async function main() {
   } else {
     console.log("git 没有可提交内容");
   }
+  // 6. 发布新版本包到 npm
   step("\n发布新版本包到 npm");
+  await publishPackage(targetVersion)
   step("\n代码 push 到 github 仓库");
 }
 
 function updatePkgVersion(version) {
-  const pkgPath = path.resolve(__dirname, "../package.json");
   const pkgStr = fs.readFileSync(pkgPath, { encoding: "utf-8" });
   const pkg = JSON.parse(pkgStr);
   pkg.version = version;
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+}
+
+async function publishPackage(version) {
+ let releaseTag = null;
+  if (args.tag) {
+    releaseTag = args.tag;
+  } else if (version.includes("alpha")) {
+    releaseTag = "alpha";
+  } else if (version.includes("beta")) {
+    releaseTag = "beta";
+  } else if (version.includes("rc")) {
+    releaseTag = "rc";
+  }
+  try {
+    await runIfNotDry(
+      "yarn",
+      [
+        "publish",
+        "--new-version",
+        version,
+        ...(releaseTag ? ["--tag", releaseTag] : []),
+        "--access",
+        "public",
+      ],
+      {
+        cwd: pkgPath,
+        stdio: "pipe",
+      }
+    );
+  } catch (e) {
+     if (e.stderr.match(/previously published/)) {
+      console.log(chalk.red(`之前已发布过该版本：${targetVersion}`))
+    } else {
+      throw e
+    }
+  }
+  
 }
 
 main().catch((err) => {
