@@ -38,8 +38,7 @@ const versionIncTypes = [
 ];
 
 async function main() {
-  // 1. 确定版本号
-  step("\n确定版本号");
+  step("\n1. 确定版本号");
   let targetVersion = args._[0];
   if (!targetVersion) {
     // 选择
@@ -78,15 +77,15 @@ async function main() {
   if (!yes) {
     return;
   }
-  // 2. 更新 package.json 文件版本号
-  step("\n更新 package.json 文件版本号");
+  step("\n2. 更新 package.json 文件版本号");
   updatePkgVersion(targetVersion);
-  // 3. 运行打包命令
-  step("\n运行打包命令");
+
+  step("\n3. 运行打包命令");
   run("yarn", ["build"]);
+
   // 4. TODO step('\n生成changelog')
-  // 5. 提交代码
-  step("\n提交代码");
+
+  step("\n5. git 提交代码");
   const { stdout } = await run("git", ["diff"], { stdio: "pipe" });
   if (stdout) {
     step("\nCommitting changes...");
@@ -97,10 +96,11 @@ async function main() {
   } else {
     console.log("git 没有可提交内容");
   }
-  // 6. 发布新版本包到 npm
-  step("\n发布新版本包到 npm");
+
+  step("\n6. 发布新版本包到 npm");
   await publishPackage(targetVersion)
-  step("\n代码 push 到 github 仓库");
+
+  step("\n 7. tag & 代码 push 到 github 仓库");
   await runIfNotDry('git', ['tag', `v${targetVersion}`])
   await runIfNotDry('git', ['push', 'origin', `refs/tags/v${targetVersion}`])
   await runIfNotDry('git', ['push'])
