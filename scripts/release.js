@@ -101,6 +101,9 @@ async function main() {
   step("\n发布新版本包到 npm");
   await publishPackage(targetVersion)
   step("\n代码 push 到 github 仓库");
+  await runIfNotDry('git', ['tag', `v${targetVersion}`])
+  await runIfNotDry('git', ['push', 'origin', `refs/tags/v${targetVersion}`])
+  await runIfNotDry('git', ['push'])
 }
 
 function updatePkgVersion(version) {
