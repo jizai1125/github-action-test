@@ -4,5 +4,5 @@ axios
   .get("/test/")
   .then((res) => {})
   .catch((err) => {
-    console.log("axios error", 444444);
+    console.log("axios error");
   });
