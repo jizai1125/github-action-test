@@ -124,7 +124,7 @@ async function publishPackage(version) {
   } else if (version.includes("rc")) {
     releaseTag = "rc";
   }
-  const pkgRoot = path.resolve(__dirname, '/')
+  const pkgRoot = path.resolve(__dirname, '../')
   console.log(pkgRoot);
 
   try {
