@@ -1,5 +1,5 @@
 const axios = require("axios");
-console.log(1);
+console.log(13333);
 axios
 .get("/test/3333")
 .then((res) => {})
