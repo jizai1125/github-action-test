@@ -81,7 +81,7 @@ async function main() {
   updatePkgVersion(targetVersion);
 
   step("\n3. 运行打包命令");
-  run("yarn", ["build"]);
+  await run("yarn", ["build"]);
 
   // 4. TODO step('\n生成changelog')
 
