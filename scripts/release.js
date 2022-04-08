@@ -147,7 +147,8 @@ async function publishPackage(version) {
      if (e.stderr.match(/previously published/)) {
       console.log(chalk.red(`之前已发布过该版本：${targetVersion}`))
     } else {
-      run('git', ['reset'])
+      // 撤回
+      run('git', ['reset', 'HEAD^'])
       throw e
     }
   }
