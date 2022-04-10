@@ -83,7 +83,8 @@ async function main() {
   step("\n3. 运行打包命令");
   await run("yarn", ["build"]);
 
-  // 4. TODO step('\n生成changelog')
+  step("\n4. 生成changelog");
+  runIfNotDry("yarn", ["run", "release"]);
 
   step("\n5. git 提交代码");
   const { stdout } = await run("git", ["diff"], { stdio: "pipe" });
@@ -98,14 +99,14 @@ async function main() {
   }
 
   step("\n6. 发布新版本包到 npm");
-  await publishPackage(targetVersion)
+  await publishPackage(targetVersion);
 
   step("\n7. 创建 tag & 代码 push 到 github 仓库");
-  await runIfNotDry('git', ['tag', `v${targetVersion}`])
-  await runIfNotDry('git', ['push', 'origin', `refs/tags/v${targetVersion}`])
-  await runIfNotDry('git', ['push'])
+  await runIfNotDry("git", ["tag", `v${targetVersion}`]);
+  await runIfNotDry("git", ["push", "origin", `refs/tags/v${targetVersion}`]);
+  await runIfNotDry("git", ["push"]);
 
-  step('\n 完成🍗🍗🍗')
+  step("\n 完成🍗🍗🍗");
 }
 
 function updatePkgVersion(version) {
@@ -116,7 +117,7 @@ function updatePkgVersion(version) {
 }
 
 async function publishPackage(version) {
- let releaseTag = null;
+  let releaseTag = null;
   if (args.tag) {
     releaseTag = args.tag;
   } else if (version.includes("alpha")) {
@@ -126,7 +127,7 @@ async function publishPackage(version) {
   } else if (version.includes("rc")) {
     releaseTag = "rc";
   }
-  const pkgRoot = path.resolve(__dirname, '../')
+  const pkgRoot = path.resolve(__dirname, "../");
   try {
     await runIfNotDry(
       "yarn",
@@ -144,15 +145,14 @@ async function publishPackage(version) {
       }
     );
   } catch (e) {
-     if (e.stderr.match(/previously published/)) {
-      console.log(chalk.red(`之前已发布过该版本：${targetVersion}`))
+    if (e.stderr.match(/previously published/)) {
+      console.log(chalk.red(`之前已发布过该版本：${targetVersion}`));
     } else {
       // 撤回
-      run('git', ['reset', 'HEAD^'])
-      throw e
+      run("git", ["reset", "HEAD^"]);
+      throw e;
     }
   }
-  
 }
 
 main().catch((err) => {
