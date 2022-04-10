@@ -7,6 +7,15 @@
 
 
 
+## [0.0.11](https://github.com/jizai1125/action_npm_test/compare/v0.0.10...v0.0.11) (2022-04-10)
+
+
+### Features
+
+* add commitlint ([dd8ac1f](https://github.com/jizai1125/action_npm_test/commit/dd8ac1ff2610979c98aa9791506cf2279d4ff7b8))
+
+
+
 ## [0.0.10](https://github.com/jizai1125/action_npm_test/compare/v0.0.9...v0.0.10) (2022-04-10)
 
 
