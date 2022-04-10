@@ -10,6 +10,7 @@
     "build": "node src/index.js",
     "release": "node scripts/release",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,14 +24,16 @@
   },
   "homepage": "https://github.com/jizai1125/action_npm_test#readme",
   "dependencies": {
-    "@commitlint/cli": "^16.2.3",
     "axios": "^0.26.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "chalk": "^4",
     "conventional-changelog-cli": "^2.2.2",
     "enquirer": "^2.3.6",
     "execa": "^5.0.0",
+    "husky": "^7.0.4",
     "minimist": "^1.2.6",
     "semver": "^7.3.6"
   }
