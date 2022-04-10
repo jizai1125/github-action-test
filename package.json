@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/jizai1125/action_npm_test#readme",
   "dependencies": {
+    "@commitlint/cli": "^16.2.3",
     "axios": "^0.26.1"
   },
   "devDependencies": {
