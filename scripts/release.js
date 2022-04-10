@@ -84,7 +84,7 @@ async function main() {
   await run("yarn", ["build"]);
 
   step("\n4. 生成changelog");
-  runIfNotDry("yarn", ["run", "release"]);
+  await runIfNotDry("yarn", ["run", "changelog"]);
 
   step("\n5. git 提交代码");
   const { stdout } = await run("git", ["diff"], { stdio: "pipe" });
