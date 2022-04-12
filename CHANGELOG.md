@@ -1,3 +1,7 @@
+## [0.0.12](https://github.com/jizai1125/action_npm_test/compare/v0.0.11...v0.0.12) (2022-04-12)
+
+
+
 ## [0.0.11](https://github.com/jizai1125/action_npm_test/compare/v0.0.10...v0.0.11) (2022-04-10)
 
 
