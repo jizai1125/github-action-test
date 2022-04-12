@@ -145,8 +145,8 @@ async function publishPackage(version) {
       }
     );
   } catch (e) {
-    if (e.stderr.match(/previously published/)) {
-      console.log(chalk.red(`之前已发布过该版本：${targetVersion}`));
+     if (e.stderr.match(/previously published/)) {
+      console.log(chalk.red(`之前已发布过该版本：${version}`));
     } else {
       // 撤回
       run("git", ["reset", "HEAD^"]);
